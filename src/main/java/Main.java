@@ -12,12 +12,14 @@ public class Main {
     static JFrame frame = new JFrame();
     static JMenuBar jmb = new JMenuBar();
 
-    static LoginForm lf = new LoginForm();
-    static InicioForm iniF = new InicioForm();
-    static AñadirTematicaForm atF = new AñadirTematicaForm();
-    static AñadirSocioForm asf = new AñadirSocioForm();
-    static AñadirAutorForm aaF = new AñadirAutorForm();
-    static BajaAltaSocioForm esF = new BajaAltaSocioForm();
+    static LoginForm loginForm = new LoginForm();
+    static InicioForm inicioForm = new InicioForm();
+    static AñadirSocioForm añadirSocioForm = new AñadirSocioForm();
+    static AñadirLibroForm añadirLibroForm = new AñadirLibroForm();
+    static AñadirTematicaForm añadirTematicaForm = new AñadirTematicaForm();
+    static AñadirAutorForm añadirAutorForm = new AñadirAutorForm();
+    static BajaAltaSocioForm bajaAltaSocioForm = new BajaAltaSocioForm();
+    static BajarAltaLibroForm bajarAltaLibroForm = new BajarAltaLibroForm();
 
     static DataBase db = new DataBase();
 
@@ -25,12 +27,14 @@ public class Main {
         JPanel panel = new JPanel();
 
         panel.setLayout(new CardLayout());
-        panel.add(atF.getTematicaPanel(), "añadirTematicaPanel");
-        panel.add(lf.getLoginPanel(), "loginPanel");
-        panel.add(asf.getAñadirSociPanel(), "añadirSociPanel");
-        panel.add(iniF.getInicioPanel(), "inicioPanel");
-        panel.add(esF.getEliminarSocioPanel(), "eliminarSociPanel");
-        panel.add(aaF.getAñadirAutorPanel(), "añadirAutorPanel");
+        panel.add(añadirTematicaForm.getTematicaPanel(), "añadirTematicaPanel");
+        panel.add(loginForm.getLoginPanel(), "loginPanel");
+        panel.add(añadirSocioForm.getAñadirSociPanel(), "añadirSociPanel");
+        panel.add(inicioForm.getInicioPanel(), "inicioPanel");
+        panel.add(bajaAltaSocioForm.getEliminarSocioPanel(), "eliminarSociPanel");
+        panel.add(añadirAutorForm.getAñadirAutorPanel(), "añadirAutorPanel");
+        panel.add(añadirLibroForm.getAñadirLibroPanel(), "añadirLibroPanel");
+        panel.add(bajarAltaLibroForm.getMirarLibroPanel(), "altaBajaLibroPanel");
 
         // Em torna un objecte de tipus Layout
         // Hi ha que fer un cast a castLayout
@@ -63,6 +67,27 @@ public class Main {
         mLibros.add(mTematicaAñadir);
         mLibros.addSeparator();
         mLibros.add(mAutorAñadir);
+
+        mLibroAñadir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                añadirLibroForm.makeAutorTable();
+                añadirLibroForm.makeTematicaTable();
+                CardLayout cl = (CardLayout) Main.frame.getContentPane().getLayout();
+                cl.show(Main.frame.getContentPane(),"añadirLibroPanel");
+                Main.configSimple(Main.frame,"Añadir libro");
+            }
+        });
+
+        mLibroBorrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bajarAltaLibroForm.makeLibroTable();
+                CardLayout cl = (CardLayout) Main.frame.getContentPane().getLayout();
+                cl.show(Main.frame.getContentPane(),"altaBajaLibroPanel");
+                Main.configSimple(Main.frame,"Dar de baja/alta libro");
+            }
+        });
 
         mTematicaAñadir.addActionListener(new ActionListener() {
             @Override
@@ -105,7 +130,7 @@ public class Main {
         miSocioBajaAlta.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                esF.makeTable();
+                bajaAltaSocioForm.makeSocioTable();
                 CardLayout cl = (CardLayout) Main.frame.getContentPane().getLayout();
                 cl.show(Main.frame.getContentPane(),"eliminarSociPanel");
                 Main.configSimple(Main.frame,"Eliminar socio");

@@ -1,11 +1,7 @@
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.util.*;
 
 /**
  * Created by Kekko on 06/06/2017.
@@ -19,9 +15,6 @@ public class BajaAltaSocioForm {
     private JButton cancelarButton;
     private JButton buscarButton;
     private JButton altaButton;
-
-    final java.util.List<Socio> list = new ArrayList<Socio>();
-    final DataBase db = new DataBase();
 
     public BajaAltaSocioForm() {
 
@@ -37,7 +30,7 @@ public class BajaAltaSocioForm {
         buscarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                makeTable();
+                makeSocioTable();
             }
 
         });
@@ -46,7 +39,7 @@ public class BajaAltaSocioForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    db.deleteSocio(Main.db.getSocio(table));
+                    Main.db.deleteSocio(Main.db.getSocio(table));
                     JOptionPane.showMessageDialog(null, "Se ha eliminado correctamente");
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -58,7 +51,7 @@ public class BajaAltaSocioForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    db.darAltaSocio(Main.db.getSocio(table));
+                    Main.db.darAltaSocio(Main.db.getSocio(table));
                     JOptionPane.showMessageDialog(null, "Se ha dado de alta correctamente");
                 } catch (Exception ex) {
                     System.out.println("Fallo al dar de alta al socio");
@@ -67,9 +60,9 @@ public class BajaAltaSocioForm {
         });
     }
 
-    public void makeTable() {
-        ModelTableSocio mts = new ModelTableSocio(new DataBase().getSocios());
-        table.setModel(mts);
+    public void makeSocioTable() {
+        ModelTableSocio modelTableSocio = new ModelTableSocio(new DataBase().getSocios());
+        table.setModel(modelTableSocio);
     }
 
     public JPanel getEliminarSocioPanel() {

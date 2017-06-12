@@ -11,8 +11,7 @@ class Autor {
     Date fechaNacimiento;
     String nacionalidad;
 
-    Autor(int idAutor, String alias, String nombre, String apellidos, Date fechaNacimiento, String nacionalidad) {
-        this.idAutor = idAutor;
+    Autor(String alias, String nombre, String apellidos, Date fechaNacimiento, String nacionalidad) {
         this.alias = alias;
         this.nombre = nombre;
         this.apellidos = apellidos;

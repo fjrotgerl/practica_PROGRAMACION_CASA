@@ -74,6 +74,12 @@ public class DataBase {
         }
     }
 
+    // Sacamos los socios
+    public Socio getSocio(JTable table) {
+        ModelTableSocio modeloSocio = (ModelTableSocio) table.getModel();
+        return modeloSocio.getSocioAt(table.getSelectedRow());
+    }
+
     // Hacemos un insert de socio
     public void insertSocio(String dni, String nombre, String apellido1, String apellido2, int año, int mes, int dia, String genero, String direccion, int cp, String provincia, String pais, int tel1, int tel2, String email) throws Exception {
         PreparedStatement psInsertar = null;
@@ -105,12 +111,6 @@ public class DataBase {
             if(c != null) c.close();
             if(s != null)  s.close();
         }
-    }
-
-    // Sacamos los socios
-    public Socio getSocio(JTable table) {
-        ModelTableSocio modeloSocio = (ModelTableSocio) table.getModel();
-        return modeloSocio.getSocioAt(table.getSelectedRow());
     }
 
     // Añadimos fecha de baja al socio
@@ -165,7 +165,7 @@ public class DataBase {
             List<Tematica> tematicas = new LinkedList<Tematica>();
             Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
             Statement s = c.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM AUTOR");
+            ResultSet rs = s.executeQuery("SELECT * FROM TEMATICA");
             while (rs.next()) {
                 String tematica = rs.getString(1);
                 tematicas.add(new Tematica(tematica));
@@ -216,19 +216,24 @@ public class DataBase {
             Statement s = c.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM AUTOR");
             while (rs.next()) {
-                int id = rs.getInt(1);
                 String alias = rs.getString(2);
                 String nombre = rs.getString(3);
                 String apellidos = rs.getString(4);
                 Date fechaNacimiento = rs.getDate(5);
                 String nacionalidad = rs.getString(6);
-                autores.add(new Autor(id,alias,nombre,apellidos,fechaNacimiento,nacionalidad));
+                autores.add(new Autor(alias,nombre,apellidos,fechaNacimiento,nacionalidad));
             }
             return autores;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    // Sacamos los autores
+    public Autor getAutor(JTable table) {
+        ModelTableAutor modelAutor = (ModelTableAutor) table.getModel();
+        return modelAutor.getAutorAt(table.getSelectedRow());
     }
 
     // Añadimos autor
@@ -257,9 +262,106 @@ public class DataBase {
         }
     }
 
-    // Sacamos los autores
-    public Autor getAutor(JTable table) {
-        ModelTableAutor modelAutor = (ModelTableAutor) table.getModel();
-        return modelAutor.getAutorAt(table.getSelectedRow());
+      ////////////
+     // LIBROS //
+    ////////////
+
+    List getLibros(){
+        try {
+            List<Libro> libros = new LinkedList<Libro>();
+            Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
+            Statement s = c.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM LIBRO");
+            while (rs.next()) {
+                int isbn = rs.getInt(1);
+                String titulo = rs.getString(2);
+                int numPaginas = rs.getInt(3);
+                String portada = rs.getString(4);
+                String editorial = rs.getString(5);
+                int autores = rs.getInt(6);
+                String tematica = rs.getString(7);
+                Date fechaBaja = rs.getDate(8);
+                libros.add(new Libro(isbn,titulo,numPaginas,portada,editorial,autores,tematica,fechaBaja));
+            }
+            return libros;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Sacamos los libros
+    public Libro getLibro(JTable table) {
+        ModelTableLibro modelLibro = (ModelTableLibro) table.getModel();
+        return modelLibro.getLibroAt(table.getSelectedRow());
+    }
+
+    // Hacemos un insert de libro
+    public void insertLibro(int isbn, String titulo, int numPaginas, String portada, String editorial, int autores, String tematica) throws Exception {
+        PreparedStatement psInsertar = null;
+        //Connection c = DriverManager.getConnection("jdbc:mysql://172.16.7.130/BIBLIOTECA", "root", "123");
+        Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
+        Statement s = c.createStatement();
+        try {
+            // Insert into
+            if (null == psInsertar) {
+                psInsertar = c.prepareStatement("INSERT INTO LIBRO VALUES ('" + isbn +
+                        "','" + titulo +
+                        "','" + numPaginas +
+                        "','" + portada +
+                        "','" + editorial +
+                        "',(SELECT ID_AUTOR FROM AUTOR WHERE ID_AUTOR='" + autores + "')" +
+                        ",(SELECT TIPO FROM TEMATICA WHERE TIPO='" + tematica + "'),NULL);");
+                psInsertar.execute();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            if(c != null) c.close();
+            if(s != null)  s.close();
+        }
+    }
+
+    // Añadimos fecha de baja al libro
+    public void deleteLibro(Libro libro) throws Exception {
+        PreparedStatement psDelete = null;
+        //Connection c = DriverManager.getConnection("jdbc:mysql://172.16.7.130/BIBLIOTECA", "root", "123");
+        Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
+
+
+        Statement s = c.createStatement();
+        try {
+            if (psDelete == null) {
+                psDelete = c.prepareStatement("UPDATE LIBRO SET FECHA_BAJA = NOW() WHERE ISBN = " + libro.isbn + ";");
+                psDelete.execute();
+            }
+        } catch (Exception e) {
+            System.out.println("Fallo al borrar el libro");
+            e.printStackTrace();
+        } finally{
+            if(c != null) c.close();
+            if(s != null)  s.close();
+        }
+    }
+
+    // Eliminamos fecha de baja al libro
+    public void darAltaLibro(Libro libro) throws Exception {
+        PreparedStatement psDelete = null;
+        //Connection c = DriverManager.getConnection("jdbc:mysql://172.16.7.130/BIBLIOTECA", "root", "123");
+        Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
+
+        Statement s = c.createStatement();
+        try {
+            if (psDelete == null) {
+                psDelete = c.prepareStatement("UPDATE LIBRO SET FECHA_BAJA = NULL WHERE ISBN = " + libro.isbn + ";");
+                psDelete.execute();
+            }
+        } catch (Exception e) {
+            System.out.println("Fallo al borrar el libro");
+            e.printStackTrace();
+        } finally{
+            if(c != null) c.close();
+            if(s != null)  s.close();
+        }
     }
 }

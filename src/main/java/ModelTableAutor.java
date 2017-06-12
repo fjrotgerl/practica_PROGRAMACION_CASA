@@ -22,23 +22,21 @@ public class ModelTableAutor extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-        return 6;
+        return 5;
     }
 
     @Override
     public String getColumnName(int column) {
         switch(column) {
             case 0:
-                return "ID";
-            case 1:
                 return "Alias";
-            case 2:
+            case 1:
                 return "Nombre";
-            case 3:
+            case 2:
                 return "Apellidos";
-            case 4:
+            case 3:
                 return "Fecha de nacimiento";
-            case 5:
+            case 4:
                 return "Nacionalidad";
         }
         throw new RuntimeException("Impossible");
@@ -49,16 +47,14 @@ public class ModelTableAutor extends AbstractTableModel{
         Autor autor = listAutor.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return autor.idAutor;
-            case 1:
                 return autor.alias;
-            case 2:
+            case 1:
                 return autor.nombre;
-            case 3:
+            case 2:
                 return autor.apellidos;
-            case 4:
+            case 3:
                 return autor.fechaNacimiento;
-            case 5:
+            case 4:
                 return autor.nacionalidad;
         }
         throw new RuntimeException("Impossible");
