@@ -20,7 +20,7 @@ public class Main {
     static AñadirAutorForm añadirAutorForm = new AñadirAutorForm();
     static BajaAltaSocioForm bajaAltaSocioForm = new BajaAltaSocioForm();
     static BajarAltaLibroForm bajarAltaLibroForm = new BajarAltaLibroForm();
-
+    static AñadirEstanteriaForm añadirEstanteriaForm = new AñadirEstanteriaForm();
     static DataBase db = new DataBase();
 
     public static void main(String[] args) throws Exception {
@@ -35,6 +35,7 @@ public class Main {
         panel.add(añadirAutorForm.getAñadirAutorPanel(), "añadirAutorPanel");
         panel.add(añadirLibroForm.getAñadirLibroPanel(), "añadirLibroPanel");
         panel.add(bajarAltaLibroForm.getMirarLibroPanel(), "altaBajaLibroPanel");
+        panel.add(añadirEstanteriaForm.getAñadirEstanteriaPanel(), "añadirEstanteriaPanel");
 
         // Em torna un objecte de tipus Layout
         // Hi ha que fer un cast a castLayout
@@ -60,6 +61,7 @@ public class Main {
         JMenuItem mLibroModificar = new JMenuItem("Modificar un libro existente...");
         JMenuItem mTematicaAñadir = new JMenuItem("Añadir una temática nueva...");
         JMenuItem mAutorAñadir = new JMenuItem("Añadir un autor...");
+        JMenuItem mEstanteriaAñadir = new JMenuItem("Añadir una estanteria...");
         mLibros.add(mLibroAñadir);
         mLibros.add(mLibroBorrar);
         mLibros.add(mLibroModificar);
@@ -67,6 +69,8 @@ public class Main {
         mLibros.add(mTematicaAñadir);
         mLibros.addSeparator();
         mLibros.add(mAutorAñadir);
+        mLibros.addSeparator();
+        mLibros.add(mEstanteriaAñadir);
 
         mLibroAñadir.addActionListener(new ActionListener() {
             @Override
@@ -104,6 +108,16 @@ public class Main {
                 CardLayout cl = (CardLayout) Main.frame.getContentPane().getLayout();
                 cl.show(Main.frame.getContentPane(),"añadirAutorPanel");
                 Main.configSimple(Main.frame,"Añadir autor");
+            }
+        });
+
+        mEstanteriaAñadir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                añadirEstanteriaForm.makeTematicaTableInEstanteria();
+                CardLayout cl = (CardLayout) Main.frame.getContentPane().getLayout();
+                cl.show(Main.frame.getContentPane(),"añadirEstanteriaPanel");
+                Main.configSimple(Main.frame,"Añadir estanteria");
             }
         });
 

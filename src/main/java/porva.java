@@ -2,36 +2,36 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * Created by pnegre on 29/05/17.
  */
 public class porva {
     public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        final JComboBox<Integer> comboBoxAños = new JComboBox<Integer>();
-        for (int i = 2017; i > 1899; i--) {
-            comboBoxAños.addItem(i);
-        }
+        StringBuilder sb = new StringBuilder();
+        String st = "ABCDEABCABCABCABC";
+        String s1 = "ABC";
+        String s2 = "X";
+        int cont = 0;
 
-        final JComboBox<String> comboBoxMeses = new JComboBox<String>();
-        String[] meses =  {"Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
-        for (int i = 0; i < 12; i++) {
-            comboBoxMeses.addItem(meses[i]);
+        for (int i = 0; i < st.length(); i++) {
+            if(st.charAt(i) == s1.charAt(cont)) {
+                for (int j = 0; j < s1.length(); j++) {
+                    if (st.charAt(i+cont) == s1.charAt(cont)) {
+                        cont++;
+                        if (cont == s1.length()) {
+                            sb.append(s2);
+                            i = i+cont;
+                        }
+                    }
+                }
+            }
+            cont = 0;
+            sb.append(st.charAt(i));
         }
-
-        final JComboBox<Integer> comboBoxDias = new JComboBox<Integer>();
-        for (int i = 1; i < 32; i++) {
-            comboBoxDias.addItem(i);
-        }
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new FlowLayout());
-        frame.setSize(500, 500);
-        frame.add(comboBoxDias);
-        frame.add(comboBoxMeses);
-        frame.add(comboBoxAños);
-        frame.setVisible(true);
+        System.out.println(sb.toString());
     }
 }
 

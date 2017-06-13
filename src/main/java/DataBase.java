@@ -9,15 +9,16 @@ import java.util.List;
 public class DataBase {
 
     static DataBase dataBase = new DataBase();
+    private PropertiesGetInfo propertiesFile = new PropertiesGetInfo();
 
     public DataBase() {
     }
 
     // Verificamos si el usuario y la contraseña existen en la base de datos
     public boolean checkLogin(String user, String password) throws Exception {
-        // Connection c = DriverManager.getConnection("jdbc:mysql://172.16.7.130/BIBLIOTECA", "root", "123");
-        Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
-      //  Connection c = DriverManager.getConnection("jdbc:mysql://10.82.246.141/BIBLIOTECA", "root", "123");
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));
 
         Statement s = c.createStatement();
         try {
@@ -46,7 +47,9 @@ public class DataBase {
     List getSocios(){
         try {
             List<Socio> socios = new LinkedList<Socio>();
-            Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
+            Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                            + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                    propertiesFile.getInfo("pass"));
             Statement s = c.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM SOCIO");
             while (rs.next()) {
@@ -83,9 +86,9 @@ public class DataBase {
     // Hacemos un insert de socio
     public void insertSocio(String dni, String nombre, String apellido1, String apellido2, int año, int mes, int dia, String genero, String direccion, int cp, String provincia, String pais, int tel1, int tel2, String email) throws Exception {
         PreparedStatement psInsertar = null;
-        //Connection c = DriverManager.getConnection("jdbc:mysql://172.16.7.130/BIBLIOTECA", "root", "123");
-        Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
-        Statement s = c.createStatement();
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));        Statement s = c.createStatement();
         try {
             // Insert into
             if (null == psInsertar) {
@@ -116,9 +119,9 @@ public class DataBase {
     // Añadimos fecha de baja al socio
     public void deleteSocio(Socio socio) throws Exception {
         PreparedStatement psDelete = null;
-        //Connection c = DriverManager.getConnection("jdbc:mysql://172.16.7.130/BIBLIOTECA", "root", "123");
-        Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
-
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));
 
         Statement s = c.createStatement();
         try {
@@ -138,9 +141,9 @@ public class DataBase {
     // Eliminamos fecha de baja al socio
     public void darAltaSocio(Socio socio) throws Exception {
         PreparedStatement psDelete = null;
-        //Connection c = DriverManager.getConnection("jdbc:mysql://172.16.7.130/BIBLIOTECA", "root", "123");
-        Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
-
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));
         Statement s = c.createStatement();
         try {
             if (psDelete == null) {
@@ -163,8 +166,9 @@ public class DataBase {
     List getTematicas(){
         try {
             List<Tematica> tematicas = new LinkedList<Tematica>();
-            Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
-            Statement s = c.createStatement();
+            Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                            + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                    propertiesFile.getInfo("pass"));            Statement s = c.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM TEMATICA");
             while (rs.next()) {
                 String tematica = rs.getString(1);
@@ -186,10 +190,9 @@ public class DataBase {
     // Añadimos tematica
     public void añadirTematica(String tematica) throws Exception {
         PreparedStatement psInsertar = null;
-        //Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.54/BIBLIOTECA", "root", "123");
-        //Connection c = DriverManager.getConnection("jdbc:mysql://172.16.7.130/BIBLIOTECA", "root", "123");
-        Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
-
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));
         Statement s = c.createStatement();
         try {
             // Insert into
@@ -212,8 +215,9 @@ public class DataBase {
     List getAutores(){
         try {
             List<Autor> autores = new LinkedList<Autor>();
-            Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
-            Statement s = c.createStatement();
+            Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                            + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                    propertiesFile.getInfo("pass"));            Statement s = c.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM AUTOR");
             while (rs.next()) {
                 String alias = rs.getString(2);
@@ -239,10 +243,9 @@ public class DataBase {
     // Añadimos autor
     public void añadirAutor(String alias, String nombre, String apellidos, int año, int mes, int dia, String nacionalidad) throws Exception {
         PreparedStatement psInsertar = null;
-        //Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.54/BIBLIOTECA", "root", "123");
-        //Connection c = DriverManager.getConnection("jdbc:mysql://172.16.7.130/BIBLIOTECA", "root", "123");
-        Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
-
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));
         Statement s = c.createStatement();
         try {
             // Insert into
@@ -269,7 +272,9 @@ public class DataBase {
     List getLibros(){
         try {
             List<Libro> libros = new LinkedList<Libro>();
-            Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
+            Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                            + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                    propertiesFile.getInfo("pass"));
             Statement s = c.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM LIBRO");
             while (rs.next()) {
@@ -299,8 +304,9 @@ public class DataBase {
     // Hacemos un insert de libro
     public void insertLibro(int isbn, String titulo, int numPaginas, String portada, String editorial, int autores, String tematica) throws Exception {
         PreparedStatement psInsertar = null;
-        //Connection c = DriverManager.getConnection("jdbc:mysql://172.16.7.130/BIBLIOTECA", "root", "123");
-        Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));
         Statement s = c.createStatement();
         try {
             // Insert into
@@ -325,9 +331,9 @@ public class DataBase {
     // Añadimos fecha de baja al libro
     public void deleteLibro(Libro libro) throws Exception {
         PreparedStatement psDelete = null;
-        //Connection c = DriverManager.getConnection("jdbc:mysql://172.16.7.130/BIBLIOTECA", "root", "123");
-        Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
-
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));
 
         Statement s = c.createStatement();
         try {
@@ -347,9 +353,9 @@ public class DataBase {
     // Eliminamos fecha de baja al libro
     public void darAltaLibro(Libro libro) throws Exception {
         PreparedStatement psDelete = null;
-        //Connection c = DriverManager.getConnection("jdbc:mysql://172.16.7.130/BIBLIOTECA", "root", "123");
-        Connection c = DriverManager.getConnection("jdbc:mysql://192.168.1.48/BIBLIOTECA", "root", "123");
-
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));
         Statement s = c.createStatement();
         try {
             if (psDelete == null) {
@@ -363,5 +369,60 @@ public class DataBase {
             if(c != null) c.close();
             if(s != null)  s.close();
         }
+    }
+
+      /////////////////
+     // ESTANTERIAS //
+    /////////////////
+
+    List getEstanterias(){
+        try {
+            List<Estanteria> estanterias = new LinkedList<Estanteria>();
+            Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                            + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                    propertiesFile.getInfo("pass"));
+            Statement s = c.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM ESTANTERIA");
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String tematica = rs.getString(2);
+                String ubicacion = rs.getString(3);
+                estanterias.add(new Estanteria(id,tematica,ubicacion));
+            }
+            return estanterias;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Sacamos los libros
+    public Estanteria getEstanteria(JTable table) {
+        ModelTableEstanteria modelTableEstanteria = (ModelTableEstanteria) table.getModel();
+        return modelTableEstanteria.getEstanteriaAt(table.getSelectedRow());
+    }
+
+    public void añadirEstanteria(String tematica, String ubicacion) throws Exception {
+        PreparedStatement psInsertar = null;
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));        Statement s = c.createStatement();
+        try {
+            // Insert into
+            if (null == psInsertar) {
+                psInsertar = c.prepareStatement("INSERT INTO ESTANTERIA VALUES (DEFAULT,'" + tematica + "','" +
+                         ubicacion + "');");
+                psInsertar.execute();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            if(c != null) c.close();
+            if(s != null)  s.close();
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new PropertiesGetInfo().getInfo("sad"));
     }
 }
