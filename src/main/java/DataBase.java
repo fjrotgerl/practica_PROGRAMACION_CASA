@@ -486,4 +486,76 @@ public class DataBase {
             if(s != null)  s.close();
         }
     }
+
+      ///////////////
+     // SANCIONES //
+    ///////////////
+
+    List getSanciones(){
+        try {
+            List<Sancion> sanciones = new LinkedList<Sancion>();
+            Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                            + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                    propertiesFile.getInfo("pass"));
+            Statement s = c.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM SANCION");
+            while (rs.next()) {
+                String tipo = rs.getString(2);
+                String descripcio = rs.getString(3);
+                Date fechaInicio = rs.getDate(4);
+                Date fechaFinal = rs.getDate(5);
+                sanciones.add(new Sancion(tipo,descripcio,fechaInicio,fechaFinal));
+            }
+            return sanciones;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Sancion getSancion(JTable table) {
+        ModelTableSancion modelTableSancion = (ModelTableSancion) table.getModel();
+        return modelTableSancion.getSancionAt(table.getSelectedRow());
+    }
+
+    public void añadirSancion(String tipo, String descripcion) throws Exception {
+        PreparedStatement psInsertar = null;
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));        Statement s = c.createStatement();
+        try {
+            // Insert into
+            if (null == psInsertar) {
+                psInsertar = c.prepareStatement("INSERT INTO SANCION VALUES(DEFAULT, '" +
+                                tipo + "','" + descripcion + "',NOW(),null)");
+                psInsertar.execute();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            if(c != null) c.close();
+            if(s != null)  s.close();
+        }
+    }
+
+    public void añadirSancionAPrestamo(String prestamoSelected) throws Exception {
+        PreparedStatement psInsertar = null;
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));        Statement s = c.createStatement();
+        try {
+            // Insert into
+            if (null == psInsertar) {
+                psInsertar = c.prepareStatement("UPDATE PRESTAMO SET FK_SANCION = (" +
+                        "SELECT SANCION.ID_SANCION FROM SANCION,PRESTAMO WHERE SANCION.FK_SOCIO=(" +
+                        "SELECT NUM_SOCIO FROM SOCIO WHERE NOMBRE='Javi'))");
+                psInsertar.execute();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            if(c != null) c.close();
+            if(s != null)  s.close();
+        }
+    }
 }

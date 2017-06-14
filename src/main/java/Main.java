@@ -19,6 +19,7 @@ public class Main {
     static AñadirTematicaForm añadirTematicaForm = new AñadirTematicaForm();
     static AñadirAutorForm añadirAutorForm = new AñadirAutorForm();
     static AñadirPrestamoForm añadirPrestamoForm = new AñadirPrestamoForm();
+    static AñadirSancionForm añadirSancionForm = new AñadirSancionForm();
     static BajaAltaSocioForm bajaAltaSocioForm = new BajaAltaSocioForm();
     static BajarAltaLibroForm bajarAltaLibroForm = new BajarAltaLibroForm();
     static AñadirEstanteriaForm añadirEstanteriaForm = new AñadirEstanteriaForm();
@@ -35,6 +36,7 @@ public class Main {
         panel.add(añadirSocioForm.getAñadirSociPanel(), "añadirSociPanel");
         panel.add(añadirAutorForm.getAñadirAutorPanel(), "añadirAutorPanel");
         panel.add(añadirLibroForm.getAñadirLibroPanel(), "añadirLibroPanel");
+        panel.add(añadirSancionForm.getSancionPanel(),"añadirSancionPanel");
         panel.add(añadirEstanteriaForm.getAñadirEstanteriaPanel(), "añadirEstanteriaPanel");
         panel.add(añadirPrestamoForm.getAñadirPrestamoPanel(), "añadirPrestamoPanel");
         panel.add(bajaAltaSocioForm.getEliminarSocioPanel(), "eliminarSociPanel");
@@ -223,7 +225,6 @@ public class Main {
     }
 
     public static void configSimple(JFrame frame, String titol) {
-        CardLayout cl = (CardLayout) frame.getContentPane().getLayout();
         frame.setTitle(titol);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
