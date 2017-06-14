@@ -438,15 +438,15 @@ public class DataBase {
                     propertiesFile.getInfo("pass"));
             Statement s = c.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM PRESTAMO");
+
             while (rs.next()) {
-                int id = rs.getInt(1);
                 String socio = rs.getString(2);
                 String sancion = rs.getString(3);
                 String bibliotecario = rs.getString(4);
                 String libro = rs.getString(5);
                 Date fechaInicio = rs.getDate(6);
                 Date fechaFinal = rs.getDate(7);
-                prestamos.add(new Prestamo(id,socio,sancion,bibliotecario,libro,fechaInicio,fechaFinal));
+                prestamos.add(new Prestamo(socio,sancion,bibliotecario,libro,fechaInicio,fechaFinal));
             }
             return prestamos;
         } catch (SQLException e) {

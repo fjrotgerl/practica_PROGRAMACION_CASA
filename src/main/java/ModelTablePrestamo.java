@@ -22,25 +22,23 @@ public class ModelTablePrestamo extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-        return 7;
+        return 6;
     }
 
     @Override
     public String getColumnName(int column) {
         switch(column) {
             case 0:
-                return "ID";
-            case 1:
                 return "Socio";
-            case 2:
+            case 1:
                 return "Sancion";
-            case 3:
+            case 2:
                 return "Bibliotecario";
-            case 4:
+            case 3:
                 return "Libro";
-            case 5:
+            case 4:
                 return "Fecha Inicio";
-            case 6:
+            case 5:
                 return "Fecha final";
         }
         throw new RuntimeException("Impossible");
@@ -51,18 +49,16 @@ public class ModelTablePrestamo extends AbstractTableModel{
         Prestamo prestamo = listPrestamo.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return prestamo.idPrestamo;
-            case 1:
                 return prestamo.socio;
-            case 2:
+            case 1:
                 return prestamo.sancion;
-            case 3:
+            case 2:
                 return prestamo.bibliotecario;
-            case 4:
+            case 3:
                 return prestamo.libro;
-            case 5:
+            case 4:
                 return prestamo.fechaInicio;
-            case 6:
+            case 5:
                 return prestamo.fechaFinal;
         }
         throw new RuntimeException("Impossible");

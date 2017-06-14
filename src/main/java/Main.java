@@ -22,6 +22,7 @@ public class Main {
     static BajaAltaSocioForm bajaAltaSocioForm = new BajaAltaSocioForm();
     static BajarAltaLibroForm bajarAltaLibroForm = new BajarAltaLibroForm();
     static AñadirEstanteriaForm añadirEstanteriaForm = new AñadirEstanteriaForm();
+    static ModificarPrestamosForm modificarPrestamosForm = new ModificarPrestamosForm();
     static DataBase db = new DataBase();
 
     public static void main(String[] args) throws Exception {
@@ -38,6 +39,7 @@ public class Main {
         panel.add(añadirPrestamoForm.getAñadirPrestamoPanel(), "añadirPrestamoPanel");
         panel.add(bajaAltaSocioForm.getEliminarSocioPanel(), "eliminarSociPanel");
         panel.add(bajarAltaLibroForm.getMirarLibroPanel(), "altaBajaLibroPanel");
+        panel.add(modificarPrestamosForm.getSancionPanel(), "modificarPrestamoPanel");
 
         // Em torna un objecte de tipus Layout
         // Hi ha que fer un cast a castLayout
@@ -157,7 +159,9 @@ public class Main {
         JMenu mPrestamos = new JMenu("Prestamos");
         jmb.add(mPrestamos);
         JMenuItem mPrestamoAñadir = new JMenuItem("Hacer un prestamo...");
+        JMenuItem mPrestamoModificar = new JMenuItem("Modificar un prestamo...");
         mPrestamos.add(mPrestamoAñadir);
+        mPrestamos.add(mPrestamoModificar);
 
         mPrestamoAñadir.addActionListener(new ActionListener() {
             @Override
@@ -167,6 +171,16 @@ public class Main {
                 Main.configSimple(Main.frame,"Añadir prestamo");
                 añadirPrestamoForm.makeLibroTableInPrestamo();
                 añadirPrestamoForm.makeSocioTableInPrestamo();
+            }
+        });
+
+        mPrestamoModificar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout) Main.frame.getContentPane().getLayout();
+                cl.show(Main.frame.getContentPane(),"modificarPrestamoPanel");
+                Main.configSimple(Main.frame,"Modificar prestamo");
+                modificarPrestamosForm.makePrestamoInPrestamoMod();
             }
         });
 
@@ -213,11 +227,5 @@ public class Main {
         frame.setTitle(titol);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-    }
-
-    public static void cancelButton() {
-        CardLayout cl = (CardLayout) frame.getContentPane().getLayout();
-        cl.show(frame.getContentPane(),"inicioPanel");
-        configSimple(frame,"Inicio");
     }
 }
