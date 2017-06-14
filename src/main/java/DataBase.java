@@ -438,9 +438,11 @@ public class DataBase {
                     propertiesFile.getInfo("pass"));
             Statement s = c.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM PRESTAMO");
-
-            while (rs.next()) {
-                String socio = rs.getString(2);
+            Statement s2 = c.createStatement();
+            ResultSet rs2 = s2.executeQuery("SELECT CONCAT(S.NOMBRE,' ',S.PRIMER_APELLIDO,' ',S.SEGUNDO_APELLIDO)" +
+                    " FROM SOCIO S, PRESTAMO P WHERE P.FK_SOCIO=S.NUM_SOCIO");
+            while (rs.next() && rs2.next()) {
+                String socio = rs2.getString(1);
                 String sancion = rs.getString(3);
                 String bibliotecario = rs.getString(4);
                 String libro = rs.getString(5);
