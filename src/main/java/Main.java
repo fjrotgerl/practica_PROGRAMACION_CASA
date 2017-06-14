@@ -18,6 +18,7 @@ public class Main {
     static AñadirLibroForm añadirLibroForm = new AñadirLibroForm();
     static AñadirTematicaForm añadirTematicaForm = new AñadirTematicaForm();
     static AñadirAutorForm añadirAutorForm = new AñadirAutorForm();
+    static AñadirPrestamoForm añadirPrestamoForm = new AñadirPrestamoForm();
     static BajaAltaSocioForm bajaAltaSocioForm = new BajaAltaSocioForm();
     static BajarAltaLibroForm bajarAltaLibroForm = new BajarAltaLibroForm();
     static AñadirEstanteriaForm añadirEstanteriaForm = new AñadirEstanteriaForm();
@@ -27,15 +28,16 @@ public class Main {
         JPanel panel = new JPanel();
 
         panel.setLayout(new CardLayout());
-        panel.add(añadirTematicaForm.getTematicaPanel(), "añadirTematicaPanel");
         panel.add(loginForm.getLoginPanel(), "loginPanel");
-        panel.add(añadirSocioForm.getAñadirSociPanel(), "añadirSociPanel");
         panel.add(inicioForm.getInicioPanel(), "inicioPanel");
-        panel.add(bajaAltaSocioForm.getEliminarSocioPanel(), "eliminarSociPanel");
+        panel.add(añadirTematicaForm.getTematicaPanel(), "añadirTematicaPanel");
+        panel.add(añadirSocioForm.getAñadirSociPanel(), "añadirSociPanel");
         panel.add(añadirAutorForm.getAñadirAutorPanel(), "añadirAutorPanel");
         panel.add(añadirLibroForm.getAñadirLibroPanel(), "añadirLibroPanel");
-        panel.add(bajarAltaLibroForm.getMirarLibroPanel(), "altaBajaLibroPanel");
         panel.add(añadirEstanteriaForm.getAñadirEstanteriaPanel(), "añadirEstanteriaPanel");
+        panel.add(añadirPrestamoForm.getAñadirPrestamoPanel(), "añadirPrestamoPanel");
+        panel.add(bajaAltaSocioForm.getEliminarSocioPanel(), "eliminarSociPanel");
+        panel.add(bajarAltaLibroForm.getMirarLibroPanel(), "altaBajaLibroPanel");
 
         // Em torna un objecte de tipus Layout
         // Hi ha que fer un cast a castLayout
@@ -151,6 +153,23 @@ public class Main {
 
             }
         });
+
+        JMenu mPrestamos = new JMenu("Prestamos");
+        jmb.add(mPrestamos);
+        JMenuItem mPrestamoAñadir = new JMenuItem("Hacer un prestamo...");
+        mPrestamos.add(mPrestamoAñadir);
+
+        mPrestamoAñadir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout) Main.frame.getContentPane().getLayout();
+                cl.show(Main.frame.getContentPane(),"añadirPrestamoPanel");
+                Main.configSimple(Main.frame,"Añadir prestamo");
+                añadirPrestamoForm.makeLibroTableInPrestamo();
+                añadirPrestamoForm.makeSocioTableInPrestamo();
+            }
+        });
+
 
         JMenu mOpciones = new JMenu("Opciones");
         jmb.add(mOpciones);

@@ -1,6 +1,3 @@
-/**
- * Created by Kekko on 12/06/2017.
- */
 public class Estanteria {
     int idEstanteria;
     String tematica;

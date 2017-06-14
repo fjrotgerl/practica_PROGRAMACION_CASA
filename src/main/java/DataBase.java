@@ -1,3 +1,5 @@
+import com.mysql.fabric.xmlrpc.base.Data;
+
 import javax.swing.*;
 import java.sql.*;
 import java.util.LinkedList;
@@ -10,6 +12,7 @@ public class DataBase {
 
     static DataBase dataBase = new DataBase();
     private PropertiesGetInfo propertiesFile = new PropertiesGetInfo();
+    private String usuarioActual;
 
     public DataBase() {
     }
@@ -21,6 +24,7 @@ public class DataBase {
                 propertiesFile.getInfo("pass"));
 
         Statement s = c.createStatement();
+        usuarioActual = user;
         try {
             ResultSet rs = s.executeQuery("SELECT COUNT(USUARIO),COUNT(CONTRASEÑA) FROM BIBLIOTECARIO WHERE USUARIO = '" + user + "' AND CONTRASEÑA = MD5('" + password + "');");
             while (rs.next()) {
@@ -422,7 +426,62 @@ public class DataBase {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(new PropertiesGetInfo().getInfo("sad"));
+      ///////////////
+     // PRESTAMOS //
+    ///////////////
+
+    List getPrestamos(){
+        try {
+            List<Prestamo> prestamos = new LinkedList<Prestamo>();
+            Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                            + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                    propertiesFile.getInfo("pass"));
+            Statement s = c.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM PRESTAMO");
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String socio = rs.getString(2);
+                String sancion = rs.getString(3);
+                String bibliotecario = rs.getString(4);
+                String libro = rs.getString(5);
+                Date fechaInicio = rs.getDate(6);
+                Date fechaFinal = rs.getDate(7);
+                prestamos.add(new Prestamo(id,socio,sancion,bibliotecario,libro,fechaInicio,fechaFinal));
+            }
+            return prestamos;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Prestamo getPrestamo(JTable table) {
+        ModelTablePrestamo modelTablePrestamo = (ModelTablePrestamo) table.getModel();
+        return modelTablePrestamo.getPrestamoAt(table.getSelectedRow());
+    }
+
+    public void añadirPrestamo(String socio, String libro, String primerApellido, String segundoApellido) throws Exception {
+        PreparedStatement psInsertar = null;
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));        Statement s = c.createStatement();
+        String selectSocio = "SELECT NUM_SOCIO FROM SOCIO WHERE NOMBRE='" + socio + "' " +
+                "AND PRIMER_APELLIDO='" + primerApellido + "' AND SEGUNDO_APELLIDO='" + segundoApellido + "'";
+        String selectBibliotecario = "SELECT DNI FROM BIBLIOTECARIO WHERE USUARIO='" + usuarioActual + "'";
+        String selectLibro = "SELECT ISBN FROM LIBRO WHERE TITULO='" + libro + "'";
+        try {
+            // Insert into
+            if (null == psInsertar) {
+                psInsertar = c.prepareStatement("INSERT INTO PRESTAMO VALUES (DEFAULT,(" + selectSocio +
+                                "), NULL, (" + selectBibliotecario +
+                                "),(" + selectLibro +"), NOW(), NULL);");
+                psInsertar.execute();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            if(c != null) c.close();
+            if(s != null)  s.close();
+        }
     }
 }

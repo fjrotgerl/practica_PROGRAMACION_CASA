@@ -27,7 +27,7 @@ public class AñadirLibroForm {
                     DataBase.dataBase.insertLibro(Integer.parseInt(getLibroISBNText().getText()), getLibroTituloText().getText(),
                             Integer.parseInt(getLibroNumPaginasText().getText()), getLibroPortadaText().getText(),
                             getLibroEditorialText().getText(),getLibroAutorTable().getSelectedRow()+1,
-                            (String) getLibroTematicaTable().getValueAt(0,0));
+                            (String) getLibroTematicaTable().getValueAt(getLibroTematicaTable().getSelectedRow(),0));
                     JOptionPane.showMessageDialog(null, "Se ha añadido correctamente");
                 } catch (Exception ex) {
                     ex.printStackTrace();
