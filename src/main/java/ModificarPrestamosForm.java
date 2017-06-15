@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
  */
 public class ModificarPrestamosForm {
     private JTable sancionPrestamoTable;
-    private JButton prórrogaButton;
+    private JButton prorrogaButton;
     private JButton cancelarButton;
     private JButton sancionarButton;
     private JPanel sancionPanel;
@@ -24,6 +24,18 @@ public class ModificarPrestamosForm {
                     Main.configSimple(Main.frame, "Añadir sancion");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se ha seleccionado ningún préstamo");
+                }
+            }
+        });
+
+        prorrogaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Main.db.añadirProrroga();
+                    makePrestamoInPrestamoMod();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });

@@ -24,6 +24,9 @@ public class Main {
     static BajarAltaLibroForm bajarAltaLibroForm = new BajarAltaLibroForm();
     static AñadirEstanteriaForm añadirEstanteriaForm = new AñadirEstanteriaForm();
     static ModificarPrestamosForm modificarPrestamosForm = new ModificarPrestamosForm();
+    static BuscarLibroForm buscarLibroForm = new BuscarLibroForm();
+    static BuscarAutorForm buscarAutorForm = new BuscarAutorForm();
+    static VerSanciones verSanciones = new VerSanciones();
     static DataBase db = new DataBase();
 
     public static void main(String[] args) throws Exception {
@@ -42,6 +45,9 @@ public class Main {
         panel.add(bajaAltaSocioForm.getEliminarSocioPanel(), "eliminarSociPanel");
         panel.add(bajarAltaLibroForm.getMirarLibroPanel(), "altaBajaLibroPanel");
         panel.add(modificarPrestamosForm.getSancionPanel(), "modificarPrestamoPanel");
+        panel.add(verSanciones.getVerSanctionPanel(), "verSancionPanel");
+        panel.add(buscarLibroForm.getBuscarLibroPanel(), "buscarLibroPanel");
+        panel.add(buscarAutorForm.getBuscarAutorPanel(), "buscarAutorPanel");
 
         // Em torna un objecte de tipus Layout
         // Hi ha que fer un cast a castLayout
@@ -64,17 +70,19 @@ public class Main {
         jmb.add(mLibros);
         JMenuItem mLibroAñadir = new JMenuItem("Añadir un libro...");
         JMenuItem mLibroBorrar = new JMenuItem("Borrar un libro existente...");
-        JMenuItem mLibroModificar = new JMenuItem("Modificar un libro existente...");
+        JMenuItem mLibroBuscar = new JMenuItem("Buscar un libro existente...");
         JMenuItem mTematicaAñadir = new JMenuItem("Añadir una temática nueva...");
         JMenuItem mAutorAñadir = new JMenuItem("Añadir un autor...");
+        JMenuItem mAutorBuscar = new JMenuItem("Buscar un autor...");
         JMenuItem mEstanteriaAñadir = new JMenuItem("Añadir una estanteria...");
         mLibros.add(mLibroAñadir);
         mLibros.add(mLibroBorrar);
-        mLibros.add(mLibroModificar);
+        mLibros.add(mLibroBuscar);
         mLibros.addSeparator();
         mLibros.add(mTematicaAñadir);
         mLibros.addSeparator();
         mLibros.add(mAutorAñadir);
+        mLibros.add(mAutorBuscar);
         mLibros.addSeparator();
         mLibros.add(mEstanteriaAñadir);
 
@@ -99,6 +107,15 @@ public class Main {
             }
         });
 
+        mLibroBuscar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout) Main.frame.getContentPane().getLayout();
+                cl.show(Main.frame.getContentPane(),"buscarLibroPanel");
+                Main.configSimple(Main.frame,"Buscar un libro");
+            }
+        });
+
         mTematicaAñadir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -117,6 +134,15 @@ public class Main {
             }
         });
 
+        mAutorBuscar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout) Main.frame.getContentPane().getLayout();
+                cl.show(Main.frame.getContentPane(),"buscarAutorPanel");
+                Main.configSimple(Main.frame,"Buscar un autor");
+            }
+        });
+
         mEstanteriaAñadir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -132,11 +158,8 @@ public class Main {
         jmb.add(mSocios);
         JMenuItem miSocioAñadir = new JMenuItem("Añadir un socio nuevo...");
         JMenuItem miSocioBajaAlta = new JMenuItem("Dar de baja/alta un socio existente...");
-        JMenuItem miSocioModificar = new JMenuItem("Modificiar un socio existente...");
         mSocios.add(miSocioAñadir);
         mSocios.add(miSocioBajaAlta);
-        mSocios.add(miSocioModificar);
-
 
         miSocioAñadir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

@@ -33,9 +33,9 @@ public class ModelTableSancion extends AbstractTableModel{
             case 1:
                 return "Descripcion";
             case 2:
-                return "Fecha inicio";
+                return "Bibliotecario";
             case 3:
-                return "Fecha final";
+                return "Socio";
         }
         throw new RuntimeException("Impossible");
     }
@@ -49,9 +49,9 @@ public class ModelTableSancion extends AbstractTableModel{
             case 1:
                 return sancion.descripcion;
             case 2:
-                return sancion.fechaInicio;
+                return sancion.bibliotecario;
             case 3:
-                return sancion.fechaFinal;
+                return sancion.socio;
         }
         throw new RuntimeException("Impossible");
     }

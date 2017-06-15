@@ -7,16 +7,14 @@ import java.sql.Date;
  */
 class Prestamo {
     String socio;
-    String sancion;
     String bibliotecario;
     String libro;
     Date fechaInicio;
     Date fechaFinal;
 
 
-    Prestamo(String socio, String sancion, String bibliotecario, String libro, Date fechaInicio, Date fechaFinal) {
+    Prestamo(String socio, String bibliotecario, String libro, Date fechaInicio, Date fechaFinal) {
         this.socio = socio;
-        this.sancion = sancion;
         this.bibliotecario = bibliotecario;
         this.libro = libro;
         this.fechaInicio = fechaInicio;

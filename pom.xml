@@ -36,9 +36,9 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <delete file="src/main/resources/application.properties"/>
-                                <copy file="src/main/resources/profile/application.${environment}.properties"
-                                      tofile="src/main/resources/application.properties"/>
+                                <delete file="src/main/resources/application.xml"/>
+                                <copy file="src/main/resources/profile/application.${environment}.xml"
+                                      tofile="src/main/resources/application.xml"/>
                             </tasks>
                         </configuration>
                     </execution>

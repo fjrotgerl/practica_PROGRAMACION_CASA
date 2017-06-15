@@ -19,7 +19,7 @@ public class AñadirPrestamoForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    DataBase.dataBase.añadirPrestamo((String )prestamoSocioTable.getValueAt(prestamoSocioTable.getSelectedRow(),2),
+                    DataBase.dataBase.añadirPrestamo((String) prestamoSocioTable.getValueAt(prestamoSocioTable.getSelectedRow(),2),
                             (String) prestamoLibroTable.getValueAt(prestamoLibroTable.getSelectedRow(),1),
                             (String) prestamoSocioTable.getValueAt(prestamoSocioTable.getSelectedRow(),3),
                             (String) prestamoSocioTable.getValueAt(prestamoSocioTable.getSelectedRow(),4));

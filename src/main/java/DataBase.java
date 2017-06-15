@@ -17,6 +17,10 @@ public class DataBase {
     public DataBase() {
     }
 
+    public static void main(String[] args) {
+        System.out.println(new PropertiesGetInfo().getInfo("pass"));
+    }
+
     // Verificamos si el usuario y la contraseña existen en la base de datos
     public boolean checkLogin(String user, String password) throws Exception {
         Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
@@ -238,6 +242,37 @@ public class DataBase {
         }
     }
 
+    List getAutoresEspecificos(String busqueda, String valor){
+        try {
+            List<Autor> autores = new LinkedList<Autor>();
+            Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                            + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                    propertiesFile.getInfo("pass"));            Statement s = c.createStatement();
+            ResultSet rs;
+            if (busqueda.equals("ALIAS") || busqueda.equals("NOMBRE") ||
+                    busqueda.equals("APELLIDOS") || busqueda.equals("FECHA_NACIMIENTO") ||
+                    busqueda.equals("NACIONALIDAD")) {
+                rs = s.executeQuery("SELECT * FROM AUTOR WHERE " + busqueda + "='" + valor + "'");
+            } if (busqueda.equals("*")) {
+                rs = s.executeQuery("SELECT * FROM AUTOR");
+            } else {
+                rs = s.executeQuery("SELECT * FROM AUTOR WHERE " + busqueda + "='" + valor + "'");
+            }
+            while (rs.next()) {
+                String alias = rs.getString(2);
+                String nombre = rs.getString(3);
+                String apellidos = rs.getString(4);
+                Date fechaNacimiento = rs.getDate(5);
+                String nacionalidad = rs.getString(6);
+                autores.add(new Autor(alias,nombre,apellidos,fechaNacimiento,nacionalidad));
+            }
+            return autores;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     // Sacamos los autores
     public Autor getAutor(JTable table) {
         ModelTableAutor modelAutor = (ModelTableAutor) table.getModel();
@@ -287,7 +322,41 @@ public class DataBase {
                 int numPaginas = rs.getInt(3);
                 String portada = rs.getString(4);
                 String editorial = rs.getString(5);
-                int autores = rs.getInt(6);
+                String autores = rs.getString(6);
+                String tematica = rs.getString(7);
+                Date fechaBaja = rs.getDate(8);
+                libros.add(new Libro(isbn,titulo,numPaginas,portada,editorial,autores,tematica,fechaBaja));
+            }
+            return libros;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    List getLibrosEspecificos(String busqueda, String valor){
+        try {
+            List<Libro> libros = new LinkedList<Libro>();
+            Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                            + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                    propertiesFile.getInfo("pass"));
+            Statement s = c.createStatement();
+            ResultSet rs;
+            if (busqueda.equals("FK_TEMATICA") || busqueda.equals("TITULO") ||
+                    busqueda.equals("ISBN") || busqueda.equals("EDITORIAL")) {
+                rs = s.executeQuery("SELECT * FROM LIBRO WHERE " + busqueda + "='" + valor + "'");
+            } if (busqueda.equals("*")) {
+                rs = s.executeQuery("SELECT * FROM LIBRO");
+            } else {
+                rs = s.executeQuery("SELECT * FROM LIBRO WHERE " + busqueda + "='" + valor + "'");
+            }
+            while (rs.next()) {
+                int isbn = rs.getInt(1);
+                String titulo = rs.getString(2);
+                int numPaginas = rs.getInt(3);
+                String portada = rs.getString(4);
+                String editorial = rs.getString(5);
+                String autores = rs.getString(6);
                 String tematica = rs.getString(7);
                 Date fechaBaja = rs.getDate(8);
                 libros.add(new Libro(isbn,titulo,numPaginas,portada,editorial,autores,tematica,fechaBaja));
@@ -437,18 +506,14 @@ public class DataBase {
                             + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
                     propertiesFile.getInfo("pass"));
             Statement s = c.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM PRESTAMO");
-            Statement s2 = c.createStatement();
-            ResultSet rs2 = s2.executeQuery("SELECT CONCAT(S.NOMBRE,' ',S.PRIMER_APELLIDO,' ',S.SEGUNDO_APELLIDO)" +
-                    " FROM SOCIO S, PRESTAMO P WHERE P.FK_SOCIO=S.NUM_SOCIO");
-            while (rs.next() && rs2.next()) {
-                String socio = rs2.getString(1);
-                String sancion = rs.getString(3);
-                String bibliotecario = rs.getString(4);
-                String libro = rs.getString(5);
-                Date fechaInicio = rs.getDate(6);
-                Date fechaFinal = rs.getDate(7);
-                prestamos.add(new Prestamo(socio,sancion,bibliotecario,libro,fechaInicio,fechaFinal));
+            ResultSet rs = s.executeQuery("SELECT P.FK_SOCIO,P.FK_BIBLIOTECARIO,P.FK_LIBRO,P.FECHA_INICIO,P.FECHA_FINAL FROM PRESTAMO P;");
+            while (rs.next()) {
+                String socio = rs.getString(1);
+                String bibliotecario = rs.getString(2);
+                String libro = rs.getString(3);
+                Date fechaInicio = rs.getDate(4);
+                Date fechaFinal = rs.getDate(5);
+                prestamos.add(new Prestamo(socio,bibliotecario,libro,fechaInicio,fechaFinal));
             }
             return prestamos;
         } catch (SQLException e) {
@@ -476,7 +541,7 @@ public class DataBase {
             if (null == psInsertar) {
                 psInsertar = c.prepareStatement("INSERT INTO PRESTAMO VALUES (DEFAULT,(" + selectSocio +
                                 "), NULL, (" + selectBibliotecario +
-                                "),(" + selectLibro +"), NOW(), NULL);");
+                                "),(" + selectLibro +"), NOW(), NOW() + INTERVAL 7 DAY);");
                 psInsertar.execute();
             }
         } catch (Exception e) {
@@ -487,7 +552,28 @@ public class DataBase {
         }
     }
 
-      ///////////////
+    public void añadirProrroga() throws Exception {
+        PreparedStatement psInsertar = null;
+        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
+                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
+                propertiesFile.getInfo("pass"));        Statement s = c.createStatement();
+        try {
+            // Insert into
+            if (null == psInsertar) {
+                psInsertar = c.prepareStatement("UPDATE PRESTAMO SET FECHA_FINAL=(SELECT FECHA_FINAL FROM" +
+                        "PRESTAMO)+ INTERVAL 7 DAY;");
+                psInsertar.execute();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            if(c != null) c.close();
+            if(s != null)  s.close();
+        }
+    }
+
+
+    ///////////////
      // SANCIONES //
     ///////////////
 
@@ -502,9 +588,9 @@ public class DataBase {
             while (rs.next()) {
                 String tipo = rs.getString(2);
                 String descripcio = rs.getString(3);
-                Date fechaInicio = rs.getDate(4);
-                Date fechaFinal = rs.getDate(5);
-                sanciones.add(new Sancion(tipo,descripcio,fechaInicio,fechaFinal));
+                String bibliotecario = rs.getString(5);
+                String socio = rs.getString(6);
+                sanciones.add(new Sancion(tipo,descripcio,bibliotecario,socio));
             }
             return sanciones;
         } catch (SQLException e) {
@@ -518,37 +604,17 @@ public class DataBase {
         return modelTableSancion.getSancionAt(table.getSelectedRow());
     }
 
-    public void añadirSancion(String tipo, String descripcion) throws Exception {
+    public void añadirSancion(String tipo, String descripcion, String user) throws Exception {
         PreparedStatement psInsertar = null;
         Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
                         + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
                 propertiesFile.getInfo("pass"));        Statement s = c.createStatement();
         try {
             // Insert into
+            String selectSocio = "SELECT NUM_SOCIO FROM SOCIO WHERE CONCAT(NOMBRE,' ',PRIMER_APELLIDO,' ',SEGUNDO_APELLIDO) = '"+ user + "'";
             if (null == psInsertar) {
                 psInsertar = c.prepareStatement("INSERT INTO SANCION VALUES(DEFAULT, '" +
-                                tipo + "','" + descripcion + "',NOW(),null)");
-                psInsertar.execute();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally{
-            if(c != null) c.close();
-            if(s != null)  s.close();
-        }
-    }
-
-    public void añadirSancionAPrestamo(String prestamoSelected) throws Exception {
-        PreparedStatement psInsertar = null;
-        Connection c = DriverManager.getConnection("jdbc:mysql://" + propertiesFile.getInfo("server")
-                        + "/" + propertiesFile.getInfo("database"), propertiesFile.getInfo("user"),
-                propertiesFile.getInfo("pass"));        Statement s = c.createStatement();
-        try {
-            // Insert into
-            if (null == psInsertar) {
-                psInsertar = c.prepareStatement("UPDATE PRESTAMO SET FK_SANCION = (" +
-                        "SELECT SANCION.ID_SANCION FROM SANCION,PRESTAMO WHERE SANCION.FK_SOCIO=(" +
-                        "SELECT NUM_SOCIO FROM SOCIO WHERE NOMBRE='Javi'))");
+                                tipo + "','" + descripcion + "',NOW(),null,(" + selectSocio + "));");
                 psInsertar.execute();
             }
         } catch (Exception e) {

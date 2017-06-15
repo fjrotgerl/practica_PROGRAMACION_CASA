@@ -9,11 +9,11 @@ class Libro {
     int numPaginas;
     String portada;
     String editorial;
-    int autores;
+    String autores;
     String tematica;
     Date fechaBaja;
 
-    Libro(int isbn, String titulo, int numPaginas, String portada, String editorial, int autores, String tematica, Date fechaBaja) {
+    Libro(int isbn, String titulo, int numPaginas, String portada, String editorial, String autores, String tematica, Date fechaBaja) {
         this.isbn = isbn;
         this.titulo = titulo;
         this.numPaginas = numPaginas;

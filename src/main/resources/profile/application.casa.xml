@@ -1,0 +1,6 @@
+<properties>
+    <server>192.168.1.52</server>
+    <user>root</user>
+    <password>123</password>
+    <database>BIBLIOTECA</database>
+</properties>

@@ -31,14 +31,12 @@ public class ModelTablePrestamo extends AbstractTableModel{
             case 0:
                 return "Socio";
             case 1:
-                return "Sancion";
-            case 2:
                 return "Bibliotecario";
-            case 3:
+            case 2:
                 return "Libro";
-            case 4:
+            case 3:
                 return "Fecha Inicio";
-            case 5:
+            case 4:
                 return "Fecha final";
         }
         throw new RuntimeException("Impossible");
@@ -51,14 +49,12 @@ public class ModelTablePrestamo extends AbstractTableModel{
             case 0:
                 return prestamo.socio;
             case 1:
-                return prestamo.sancion;
-            case 2:
                 return prestamo.bibliotecario;
-            case 3:
+            case 2:
                 return prestamo.libro;
-            case 4:
+            case 3:
                 return prestamo.fechaInicio;
-            case 5:
+            case 4:
                 return prestamo.fechaFinal;
         }
         throw new RuntimeException("Impossible");

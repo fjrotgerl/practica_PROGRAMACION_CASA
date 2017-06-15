@@ -1,18 +1,16 @@
-import java.sql.Date;
-
 /**
  * Created by Kekko on 11/06/2017.
  */
 class Sancion {
     String tipo;
     String descripcion;
-    Date fechaInicio;
-    Date fechaFinal;
+    String bibliotecario;
+    String socio;
 
-    Sancion(String tipo, String descripcion, Date fechaInicio, Date fechaFinal) {
+    Sancion(String tipo, String descripcion, String bibliotecario, String socio) {
         this.tipo = tipo;
         this.descripcion = descripcion;
-        this.fechaInicio = fechaInicio;
-        this.fechaFinal = fechaFinal;
+        this.bibliotecario = bibliotecario;
+        this.socio = socio;
     }
 }

@@ -15,17 +15,28 @@ public class AñadirSancionForm {
     private JButton guardarButton;
     private JPanel sancionPanel;
     private JButton cancelButton;
+    private JButton verSancionButton;
 
     public AñadirSancionForm() {
         fillComboBox();
+
+        verSancionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.verSanciones.makeVerSancion();
+                CardLayout cl = (CardLayout) Main.frame.getContentPane().getLayout();
+                cl.show(Main.frame.getContentPane(),"verSancionPanel");
+                Main.configSimple(Main.frame,"Ver sanciones");
+            }
+        });
 
         guardarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Main.db.añadirSancion((String) sancionTipo.getSelectedItem(),sancionDescripcion.getText());
-                    Main.db.añadirSancionAPrestamo((String) Main.modificarPrestamosForm.getSancionPrestamoTable().getValueAt
-                            (Main.modificarPrestamosForm.getSancionPrestamoTable().getSelectedRow(), 2));
+                    Main.db.añadirSancion((String) sancionTipo.getSelectedItem(),sancionDescripcion.getText(),
+                            (String) Main.modificarPrestamosForm.getSancionPrestamoTable().getValueAt
+                                    (Main.modificarPrestamosForm.getSancionPrestamoTable().getSelectedRow(), 1));
                     JOptionPane.showMessageDialog(null, "Se ha añadido correctamente");
                 } catch (Exception ex) {
                     ex.printStackTrace();
